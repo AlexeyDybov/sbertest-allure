@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import qa.abstracts.Steps;
+import qa.pageobject.Steps;
 import ru.sber.elements.ResultsElement;
 import ru.yandex.qatools.allure.annotations.Step;
 

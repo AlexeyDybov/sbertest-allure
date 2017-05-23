@@ -1,4 +1,4 @@
-package qa.abstracts;
+package qa.pageobject;
 
 import org.openqa.selenium.WebDriver;
 

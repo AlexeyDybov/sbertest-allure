@@ -3,7 +3,7 @@ package ru.sber.steps;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
-import qa.abstracts.Steps;
+import qa.pageobject.Steps;
 import ru.sber.data.Category;
 import ru.sber.elements.CategoriesElement;
 import ru.yandex.qatools.allure.annotations.Step;

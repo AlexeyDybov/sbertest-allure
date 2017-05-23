@@ -13,6 +13,7 @@
         <webdriver.base.url>https://www.yandex.ru</webdriver.base.url>
         <webdriver.timeouts.implicitlywait>15</webdriver.timeouts.implicitlywait>
         <aspectj.version>1.8.9</aspectj.version>
+        <threadCount>1</threadCount>
     </properties>
 
     <dependencies>
@@ -43,7 +44,6 @@
         </dependency>
     </dependencies>
 
-
     <build>
         <plugins>
             <plugin>
@@ -51,6 +51,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>${threadCount}</threadCount>
                     <systemProperties>
                         <webdriver.driver>${webdriver.driver}</webdriver.driver>
                         <webdriver.base.url>${webdriver.base.url}</webdriver.base.url>

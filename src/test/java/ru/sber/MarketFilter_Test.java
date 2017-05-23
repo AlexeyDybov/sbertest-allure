@@ -1,9 +1,13 @@
 package ru.sber;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import qa.driver.WebDriverFactory;
+import qa.annotations.Driver;
+import qa.runners.FetaRunner;
 import ru.sber.data.Category;
 import ru.sber.data.Vendor;
 import ru.sber.steps.*;
@@ -13,7 +17,8 @@ import java.util.List;
 /**
  * Фильтры в маркете
  */
-public class MarketFilter_Test extends BaseTest {
+@RunWith(FetaRunner.class)
+public class MarketFilter_Test {
 
     private HomeSteps homeSteps;
     private MarketSteps marketSteps;
@@ -23,9 +28,14 @@ public class MarketFilter_Test extends BaseTest {
     private SearchSteps searchSteps;
     private ItemSteps itemSteps;
 
+    @Driver
+    public WebDriver driver;
+
+
+
     @Before
     public void setUp() {
-        driver = WebDriverFactory.getDriverInstance();
+//        driver = WebDriverFactory.getDriverInstance();
         homeSteps = new HomeSteps(driver);
         marketSteps = new MarketSteps(driver);
         categoriesSteps = new CategoriesSteps(driver);
@@ -91,5 +101,10 @@ public class MarketFilter_Test extends BaseTest {
 
         itemSteps.itemPageShouldBeOpened();
         itemSteps.itemNameShouldBeEqual(itemName);
+    }
+
+    @After
+    public void tearDown(){
+        driver.quit();
     }
 }

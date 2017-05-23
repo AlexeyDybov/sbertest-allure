@@ -2,7 +2,7 @@ package ru.sber.steps;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
-import qa.abstracts.Steps;
+import qa.pageobject.Steps;
 import ru.sber.data.Vendor;
 import ru.sber.elements.FilterElement;
 import ru.yandex.qatools.allure.annotations.Step;

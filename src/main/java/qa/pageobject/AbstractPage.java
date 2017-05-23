@@ -1,9 +1,6 @@
-package qa.abstracts;
+package qa.pageobject;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import qa.waiting.InvisibilityOfElement;
 import qa.waiting.VisibilityOfElement;
@@ -98,6 +95,16 @@ public class AbstractPage extends AbstractClass {
             resetImplicitTimeout();
         }
         return result;
+    }
+
+    /**
+     * Прокручиваем страницу до элемента, если элемент вне видимости пользователя
+     * @param by локатор или селектор
+     * @param position true - элемент вверху страницы, false - элемент внизу страницы
+     */
+    protected void scrollPageToElement(By by, boolean position) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(arguments[1]);", element(by), position);
+        waitFor(500);
     }
 
     protected WebElement element(By by){

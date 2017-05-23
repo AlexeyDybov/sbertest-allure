@@ -3,7 +3,7 @@ package ru.sber.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import qa.abstracts.Page;
+import qa.pageobject.Page;
 
 /**
  * Главная страница

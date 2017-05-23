@@ -1,4 +1,4 @@
-package qa.abstracts;
+package qa.pageobject;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.openqa.selenium.WebDriver;

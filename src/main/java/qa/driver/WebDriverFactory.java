@@ -5,28 +5,67 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
-
 /**
- * Фабрика драйверов
- * Created by Alexey Dybov on 28.10.16.
+ * @author Alexey Dybov <a.dybov@corp.mail.ru>
  */
 public class WebDriverFactory {
 
-    public static WebDriver getDriverInstance() {
-        String browser = System.getProperty("webdriver.driver", "chrome");
-        WebDriver driver;
-        switch (browser) {
-            case "chrome":
-                driver = new ChromeDriver();
-                break;
-            default:
-                driver = new FirefoxDriver();
-                break;
+    private static ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+    private static String webDriverName = System.getProperty("webdriver.driver");
+    private static String remoteUrl = System.getProperty("webdriver.remote.url");
+
+    public static WebDriver getDriver() {
+        if (driverThreadLocal.get() == null) {
+            driverThreadLocal.set(getInstance());
         }
-        int implicitlyWait = Integer.parseInt(System.getProperty("webdriver.timeouts.implicitlywait"));
-        driver.manage().timeouts().implicitlyWait(implicitlyWait, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-        return driver;
+        return driverThreadLocal.get();
     }
 
+    private static WebDriver getInstance() {
+        if (remoteUrl != null) {
+            return getRemoteDriver();
+        }
+        return getLocalDriver();
+    }
+
+    private static WebDriver getLocalDriver() {
+        switch (webDriverName) {
+            case "chrome":
+                return getChromeDriver();
+            case "firefox":
+                return getFirefoxDriver();
+            default:
+                return getChromeDriver();
+        }
+    }
+
+    private static WebDriver getRemoteDriver() {
+        switch (webDriverName) {
+            case "chrome":
+                return getRemoteChromeDriver();
+            case "firefox":
+                return getRemoteFirefoxDriver();
+            default:
+                return getRemoteChromeDriver();
+        }
+    }
+
+    private static WebDriver getRemoteFirefoxDriver() {
+        return null;
+    }
+
+    private static WebDriver getRemoteChromeDriver() {
+        return null;
+    }
+
+    private static WebDriver getChromeDriver() {
+        if (driverThreadLocal.get() == null) {
+            driverThreadLocal.set(new ChromeDriver());
+        }
+        return driverThreadLocal.get();
+    }
+
+    private static WebDriver getFirefoxDriver() {
+        return null;
+    }
 }

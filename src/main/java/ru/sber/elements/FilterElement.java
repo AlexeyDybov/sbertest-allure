@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import qa.abstracts.Page;
+import qa.pageobject.Page;
 import ru.sber.data.Vendor;
 
 /**
@@ -20,10 +20,11 @@ public class FilterElement extends Page {
     private WebElement maxPrice;
     @FindBy(css = ".button_action_n-filter-apply")
     private WebElement applyButton;
-    @FindBy(css = ".vendors-list__top>button")
+    @FindBy(css = ".n-filter-panel-aside_type_default>div>.n-filter-block:nth-of-type(4) button")
     private WebElement moreVendorsButton;
 
-    private String vendorCheckboxLocator = "//*[contains(@class,'vendors-list')]//span[contains(@class,'checkbox')][./label[text()='%s']]//input";
+    private String vendorCheckboxLocator = "//*[contains(@class,'n-filter-panel-aside_type_default')]/div/*[contains(@class,'n-filter-block')][4]//span[contains(@class,'checkbox')][./label[text()='%s']]";
+    private String vendorLocator = "//div[contains(@class,'n-filter-block__item')][.//label[text()='%s']]";
 
     public FilterElement(WebDriver driver) {
         super(driver);
@@ -47,6 +48,8 @@ public class FilterElement extends Page {
 
     public void setVendor(Vendor vendor) {
         String locator = String.format(vendorCheckboxLocator, vendor.name());
+        String vendorLocatora = String.format(vendorLocator, vendor.name());
+        scrollPageToElement(By.xpath(vendorLocatora), true);
         element(By.xpath(locator)).click();
     }
 
