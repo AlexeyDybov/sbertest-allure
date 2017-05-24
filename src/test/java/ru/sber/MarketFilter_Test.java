@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import qa.annotations.Driver;
+import qa.annotations.Steps;
 import qa.runners.FetaRunner;
 import ru.sber.data.Category;
 import ru.sber.data.Vendor;
@@ -20,7 +21,7 @@ import java.util.List;
 @RunWith(FetaRunner.class)
 public class MarketFilter_Test {
 
-    private HomeSteps homeSteps;
+//    private HomeSteps homeSteps;
     private MarketSteps marketSteps;
     private CategoriesSteps categoriesSteps;
     private FilterSteps filterSteps;
@@ -30,13 +31,15 @@ public class MarketFilter_Test {
 
     @Driver
     public WebDriver driver;
+    @Steps
+    public HomeSteps homeSteps;
 
 
 
     @Before
     public void setUp() {
 //        driver = WebDriverFactory.getDriverInstance();
-        homeSteps = new HomeSteps(driver);
+//        homeSteps = new HomeSteps(driver);
         marketSteps = new MarketSteps(driver);
         categoriesSteps = new CategoriesSteps(driver);
         filterSteps = new FilterSteps(driver);

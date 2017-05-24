@@ -6,6 +6,8 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.WebDriver;
 import qa.annotations.Driver;
+import qa.annotations.Steps;
+import qa.driver.StepFactory;
 import qa.driver.WebDriverFactory;
 
 import java.lang.annotation.Annotation;
@@ -95,13 +97,14 @@ public class FetaRunner extends BlockJUnit4ClassRunner {
     protected Statement methodInvoker(final FrameworkMethod method, final Object test) {
 
         if (webTestsAreSupported()) {
-            injectDriverInto(test);
+            WebDriver driver = WebDriverFactory.getDriver();
+            injectDriverInto(driver, test);
+            injectScenarioStepsInto(driver,test);
 //            initPagesObjectUsing(driverFor(method));
 //            injectAnnotatedPagesObjectInto(test);
 //            initStepFactoryUsing(getPages());
         }
 
-        injectScenarioStepsInto(test);
 //        injectEnvironmentVariablesInto(test);
 //        useStepFactoryForDataDrivenSteps();
 
@@ -110,12 +113,22 @@ public class FetaRunner extends BlockJUnit4ClassRunner {
         return super.methodInvoker(method, test);
     }
 
-    private void injectScenarioStepsInto(Object test) {
-
+    private void injectScenarioStepsInto(WebDriver driver, Object test) {
+        Set<Field> stepFields = getAnnotatedFields(Steps.class);
+        for (Field field : stepFields) {
+            try {
+                Object steps = StepFactory.getInstance().initNewStepLibrary(field.getType(), driver);
+                field.setAccessible(true);
+                field.set(test, steps);
+            } catch (IllegalAccessException e) {
+                throw new Error("Could not access or set step field: "
+                    + field
+                    + " - is this field public?", e);
+            }
+        }
     }
 
-    private void injectDriverInto(Object test) {
-        WebDriver driver = WebDriverFactory.getDriver();
+    private void injectDriverInto(WebDriver driver, Object test) {
         Set<Field> sd = getAnnotatedFields(Driver.class);
         for (Field field : sd) {
             try {
