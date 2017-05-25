@@ -33,7 +33,7 @@ public class HomeSteps extends Steps {
      * Открывает главную страницу
      */
     @Step
-    private void openPageUnchecked() {
+    public void openPageUnchecked() {
         homePage.open();
     }
 
@@ -41,7 +41,7 @@ public class HomeSteps extends Steps {
      * Проверяет что открылась главная страница
      */
     @Step
-    private void homePageShouldBeOpened() {
+    public void homePageShouldBeOpened() {
         Assert.assertTrue("Не открылась главная страница", homePage.isOpened());
     }
 

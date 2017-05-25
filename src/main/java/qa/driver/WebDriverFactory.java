@@ -2,9 +2,6 @@ package qa.driver;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-
-import java.util.concurrent.TimeUnit;
 /**
  * @author Alexey Dybov <a.dybov@corp.mail.ru>
  */
@@ -15,10 +12,12 @@ public class WebDriverFactory {
     private static String remoteUrl = System.getProperty("webdriver.remote.url");
 
     public static WebDriver getDriver() {
-        if (driverThreadLocal.get() == null) {
-            driverThreadLocal.set(getInstance());
-        }
-        return driverThreadLocal.get();
+//        if (driverThreadLocal.get() == null) {
+//            driverThreadLocal.set(getInstance());
+//        }
+//        return driverThreadLocal.get();
+
+        return getInstance();
     }
 
     private static WebDriver getInstance() {
@@ -59,10 +58,7 @@ public class WebDriverFactory {
     }
 
     private static WebDriver getChromeDriver() {
-        if (driverThreadLocal.get() == null) {
-            driverThreadLocal.set(new ChromeDriver());
-        }
-        return driverThreadLocal.get();
+        return new ChromeDriver();
     }
 
     private static WebDriver getFirefoxDriver() {

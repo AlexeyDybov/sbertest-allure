@@ -2,10 +2,6 @@ package qa.driver;
 
 import net.sf.cglib.proxy.Enhancer;
 import org.openqa.selenium.WebDriver;
-import qa.pageobject.StepInterceptor;
-import qa.pageobject.Steps;
-
-import java.lang.reflect.Field;
 
 /**
  * @author Alexey Dybov <a.dybov@corp.mail.ru>

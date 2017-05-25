@@ -1,4 +1,4 @@
-package qa.pageobject;
+package qa.driver;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -38,14 +38,7 @@ public class StepInterceptor implements MethodInterceptor {
     public Object intercept(final Object obj, final Method method,
                             final Object[] args, final MethodProxy proxy) throws Throwable {
 
-        Object result;
-        if (baseClassMethod(method, obj.getClass())) {
-            result = runBaseObjectMethod(obj, method, args, proxy);
-        } else {
-            result = testStepResult(obj, method, args, proxy);
-        }
-        return result;
-
+        return testStepResult(obj, method, args, proxy);
     }
 
     private final List<String> OBJECT_METHODS
@@ -214,7 +207,7 @@ public class StepInterceptor implements MethodInterceptor {
         return false;
     }
 
-    private boolean aPreviousStepHasFailed() {
+    private boolean  aPreviousStepHasFailed() {
         boolean aPreviousStepHasFailed = false;
 //        if (StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()) {
 //            aPreviousStepHasFailed = true;
@@ -293,14 +286,12 @@ public class StepInterceptor implements MethodInterceptor {
     private Object runTestStep(final Object obj, final Method method,
                                final Object[] args, final MethodProxy proxy) throws Throwable {
 
-        String callingClass = testContext();
-        LOGGER.debug("STARTING STEP: {} - {}");
-//        LOGGER.debug("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).or(method.getName()));
+
+        LOGGER.debug("STARTING STEP: {} - {}", method.getName());
         Object result = null;
         try {
             result = executeTestStepMethod(obj, method, args, proxy, result);
-            LOGGER.debug("STEP DONE: {}");
-//            LOGGER.debug("STEP DONE: {}", StepName.fromStepAnnotationIn(method).or(method.getName()));
+            LOGGER.debug("STEP DONE: {}", method.getName());
         } catch (AssertionError failedAssertion) {
             error = failedAssertion;
             logStepFailure(obj, method, args, failedAssertion);
@@ -317,26 +308,23 @@ public class StepInterceptor implements MethodInterceptor {
 
     private void logStepFailure(Object object, Method method, Object[] args, Throwable assertionError) throws Throwable {
         notifyOfStepFailure(object, method, args, assertionError);
-
-
-        LOGGER.debug("STEP FAILED: {} - {}");
-//        LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).or(method.getName()), assertionError.getMessage());
+        LOGGER.debug("STEP FAILED: {} - {}", method.getName());
     }
 
     private Object executeTestStepMethod(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {
-//        try {
-//            result = invokeMethod(obj, args, proxy);
-//            notifyStepFinishedFor(method, args);
-//        } catch (PendingStepException pendingStep) {
-//            notifyStepPending(pendingStep.getMessage());
-//        } catch (IgnoredStepException ignoredStep) {
-//            notifyStepIgnored(ignoredStep.getMessage());
-//        } catch (AssumptionViolatedException assumptionViolated) {
-//            notifyAssumptionViolated(assumptionViolated.getMessage());
-//        }
-//
-//        Preconditions.checkArgument(true);
-//        return result;
+        try {
+            result = invokeMethod(obj, args, proxy);
+            notifyStepFinishedFor(method, args);
+        } catch (PendingStepException pendingStep) {
+            notifyStepPending(pendingStep.getMessage());
+        } catch (IgnoredStepException ignoredStep) {
+            notifyStepIgnored(ignoredStep.getMessage());
+        } catch (AssumptionViolatedException assumptionViolated) {
+            notifyAssumptionViolated(assumptionViolated.getMessage());
+        }
+
+        Preconditions.checkArgument(true);
+        return result;
         return obj;
     }
 

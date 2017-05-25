@@ -4,10 +4,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import qa.annotations.Driver;
 import qa.annotations.Steps;
+import qa.driver.WebDriverFactory;
 import qa.runners.FetaRunner;
 import ru.sber.data.Category;
 import ru.sber.data.Vendor;
@@ -38,7 +40,7 @@ public class MarketFilter_Test {
 
     @Before
     public void setUp() {
-//        driver = WebDriverFactory.getDriverInstance();
+//        driver = WebDriverFactory.getDriver();
 //        homeSteps = new HomeSteps(driver);
         marketSteps = new MarketSteps(driver);
         categoriesSteps = new CategoriesSteps(driver);
@@ -104,6 +106,13 @@ public class MarketFilter_Test {
 
         itemSteps.itemPageShouldBeOpened();
         itemSteps.itemNameShouldBeEqual(itemName);
+    }
+
+    @Test
+    public void marketFilter2() {
+        homeSteps.openHomePage();
+        homeSteps.clickMarket();
+        marketSteps.marketPageShouldBeOpened();
     }
 
     @After
