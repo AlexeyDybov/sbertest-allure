@@ -16,12 +16,10 @@ public class FetaListener extends AllureRunListener implements StepListener {
 
     @Override
     public void stepStarted() {
-        LOGGER.info("thread " + this.toString());
     }
 
     @Override
     public void stepFailed(Throwable failure) {
-        LOGGER.info("thread " + this.toString());
     }
 
     @Override
