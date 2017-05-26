@@ -20,7 +20,7 @@ import java.util.List;
  * Фильтры в маркете
  */
 @RunWith(FetaRunner.class)
-public class MarketFilter_Test {
+public class MarketFilter2_Test {
 
 //    private HomeSteps homeSteps;
     private MarketSteps marketSteps;

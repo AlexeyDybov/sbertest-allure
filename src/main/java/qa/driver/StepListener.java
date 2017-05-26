@@ -6,6 +6,6 @@ package qa.driver;
 public interface StepListener {
 
     void stepStarted();
-    void stepFailure();
+    void stepFailed(Throwable failure);
     void stepFinished();
 }

@@ -287,7 +287,7 @@ public class StepInterceptor implements MethodInterceptor {
                                final Object[] args, final MethodProxy proxy) throws Throwable {
 
 
-        LOGGER.debug("STARTING STEP: {} - {}", method.getName());
+        LOGGER.info("STARTING STEP: {}", method.getName());
         Object result = null;
         try {
             result = executeTestStepMethod(obj, method, args, proxy, result);
@@ -312,20 +312,20 @@ public class StepInterceptor implements MethodInterceptor {
     }
 
     private Object executeTestStepMethod(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {
-        try {
+//        try {
             result = invokeMethod(obj, args, proxy);
             notifyStepFinishedFor(method, args);
-        } catch (PendingStepException pendingStep) {
-            notifyStepPending(pendingStep.getMessage());
-        } catch (IgnoredStepException ignoredStep) {
-            notifyStepIgnored(ignoredStep.getMessage());
-        } catch (AssumptionViolatedException assumptionViolated) {
-            notifyAssumptionViolated(assumptionViolated.getMessage());
-        }
+//        } catch (PendingStepException pendingStep) {
+//            notifyStepPending(pendingStep.getMessage());
+//        } catch (IgnoredStepException ignoredStep) {
+//            notifyStepIgnored(ignoredStep.getMessage());
+//        } catch (AssumptionViolatedException assumptionViolated) {
+//            notifyAssumptionViolated(assumptionViolated.getMessage());
+//        }
 
-        Preconditions.checkArgument(true);
+//        Preconditions.checkArgument(true);
         return result;
-        return obj;
+//        return obj;
     }
 
     private Object invokeMethod(final Object obj, final Object[] args, final MethodProxy proxy) throws Throwable {
@@ -338,7 +338,7 @@ public class StepInterceptor implements MethodInterceptor {
     }
 
     private void notifyStepFinishedFor(final Method method, final Object[] args) {
-//        StepEventBus.getEventBus().stepFinished();
+        StepEventBus.getEventBus().stepFinished();
     }
 
     private void notifySkippedStepFinishedFor(final Method method, final Object[] args) {
@@ -407,7 +407,7 @@ public class StepInterceptor implements MethodInterceptor {
 //                .withDisplayedFields(fieldValuesIn(object));
 //
 //        StepFailure failure = new StepFailure(description, cause);
-//        StepEventBus.getEventBus().stepFailed(failure);
+        StepEventBus.getEventBus().stepFailed(cause);
 //        if (shouldThrowExceptionImmediately()) {
 //            throw cause;
 //        }

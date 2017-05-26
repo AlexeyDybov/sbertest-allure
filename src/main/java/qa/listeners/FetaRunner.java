@@ -1,5 +1,7 @@
-package qa.runners;
+package qa.listeners;
 
+import org.junit.runner.notification.RunListener;
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
@@ -7,8 +9,10 @@ import org.junit.runners.model.Statement;
 import org.openqa.selenium.WebDriver;
 import qa.annotations.Driver;
 import qa.annotations.Steps;
+import qa.driver.StepEventBus;
 import qa.driver.StepFactory;
 import qa.driver.WebDriverFactory;
+import qa.listeners.FetaListener;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -20,6 +24,8 @@ import java.util.Set;
  */
 public class FetaRunner extends BlockJUnit4ClassRunner {
 
+    private FetaListener stepListener;
+
     /**
      * Creates a BlockJUnit4ClassRunner to run {@code klass}
      * @param klass
@@ -28,67 +34,66 @@ public class FetaRunner extends BlockJUnit4ClassRunner {
     public FetaRunner(Class<?> klass) throws InitializationError {
         super(klass);
     }
-
-//    private RunListener stepListener;
 //
-//    /**
-//     * Creates a BlockJUnit4ClassRunner to run {@code klass}
-//     * @param klass
-//     * @throws InitializationError if the test class is malformed.
-//     */
-//    public FetaRunner(Class<?> klass) throws InitializationError {
-//        super(klass);
-//    }
-//    public void run(RunNotifier notifier) {
+//    @Override
+//    public void run(final RunNotifier notifier) {
 ////        if (skipThisTest()) { return; }
 //
 //        try {
 //            RunNotifier localNotifier = initializeRunNotifier(notifier);
 //            super.run(localNotifier);
+////            fireNotificationsBasedOnTestResultsTo(notifier);
 //        } catch (Throwable someFailure) {
 //            someFailure.printStackTrace();
 //            throw someFailure;
 //        } finally {
 ////            notifyTestSuiteFinished();
 ////            generateReports();
-////            Map<String, List<String>> failedTests = stepListener.getFailedTests();
-////            failureRerunner.recordFailedTests(failedTests);
 ////            dropListeners(notifier);
+////            closeDrivers();
 //        }
 //    }
-//
-//    private RunNotifier initializeRunNotifier(RunNotifier notifier) {
-//        notifier.addListener(getStepListener());
-//        return notifier;
-//    }
-//
-//
-//    protected RunListener getStepListener() {
-//        if (stepListener == null) {
-//            buildAndConfigureListeners();
-//        }
-//        return stepListener;
-//    }
-//
-//    private void buildAndConfigureListeners() {
-//
-////        initStepEventBus();
+
+    private RunNotifier initializeRunNotifier(RunNotifier notifier) {
+        RunNotifier notifierForSteps = new RunNotifier();
+        notifierForSteps.addListener(getStepListener());
+        return notifierForSteps;
+    }
+
+    protected RunListener getStepListener() {
+        if (stepListener == null) {
+            buildAndConfigureListeners();
+        }
+        return stepListener;
+    }
+
+    private void buildAndConfigureListeners() {
+
 //        if (webTestsAreSupported()) {
-//            WebDriver driver = WebDriverFactory.getDriver();
-////            initSteps
-////            initPagesObjectUsing(driver);
-////            setStepListener(initListenersUsing(getPages()));
-////            initStepFactoryUsing(getPages());
+//            initPagesObjectUsing(webdriverManager.getWebdriver(requestedDriver));
+        FetaListener fetaListener = new FetaListener();
+        setStepListener(fetaListener);
+
+        initStepEventBus(fetaListener);
+
+//            initStepFactoryUsing(getPages());
 //        } else {
-////            setStepListener(initListeners());
-////            initStepFactory();
+//            setStepListener(initListeners());
+//            initStepFactory();
 //        }
-//    }
+    }
+
+    private void setStepListener(FetaListener fetaListener) {
+        this.stepListener = fetaListener;
+    }
+
+    private void initStepEventBus(FetaListener fetaListener) {
+        StepEventBus.getEventBus().init(fetaListener);
+    }
 
     private boolean webTestsAreSupported() {
         return getAnnotatedFields(Driver.class).size() > 0;
     }
-
 
     /**
      * Running a unit test, which represents a test scenario.
@@ -100,6 +105,7 @@ public class FetaRunner extends BlockJUnit4ClassRunner {
             WebDriver driver = WebDriverFactory.getDriver();
             injectDriverInto(driver, test);
             injectScenarioStepsInto(driver,test);
+//            buildAndConfigureListeners();
 //            initPagesObjectUsing(driverFor(method));
 //            injectAnnotatedPagesObjectInto(test);
 //            initStepFactoryUsing(getPages());
